@@ -45,7 +45,9 @@ def registUser():
 
 @app.route('/regist/score/<userId>', methods=['GET', 'POST'])
 def registScore(userId):
-	existUser(userId)
+	existUserId = existUser(userId)
+	if existUserId['requestCode'] == -1:
+		return json.dumps(existUserId, ensure_ascii=False)
 	query = session.query(User).filter_by(userId=userId)
 	result = {}
 	
@@ -63,7 +65,10 @@ def registScore(userId):
 
 @app.route('/get/score/<userId>', methods=['GET', 'POST'])
 def getScore(userId):
-	existUser(userId)
+	existUserId = existUser(userId)
+	if existUserId['requestCode'] == -1:
+		return json.dumps(existUserId, ensure_ascii=False)
+
 	query = session.query(User).filter_by(userId=userId)
 	result = {}
 
@@ -99,7 +104,11 @@ def existUser(userId):
 	except NoResultFound, e:
 		result['requestCode'] = -1
 		result['requestMessage'] = u'존재하지 않는 유저입니다.'
-		return json.dumps(result, ensure_ascii=False)
+		return result
+		#return json.dumps(result, ensure_ascii=False)
+	result['requestCode'] = 1
+	result['requestMessage'] = u'존재하는 유저입니다.'
+	return result
 
 
 
