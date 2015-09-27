@@ -73,6 +73,7 @@ def getScore(userId):
 	result = {}
 
 	user = query.first()
+	result['requestCode'] = 1
 	result['userId'] = user.userId
 	result['score'] = user.score
 
